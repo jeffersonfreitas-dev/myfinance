@@ -27,6 +27,8 @@ public class Banco implements Serializable{
 	@NotBlank(message = "Informe um nome para o banco")
 	private String nome;
 	
+	private boolean ativo;
+	
 	
 
 	public Long getId() {
@@ -51,6 +53,14 @@ public class Banco implements Serializable{
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}	
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 
 	@Override
@@ -79,6 +89,8 @@ public class Banco implements Serializable{
 	}
 	
 	
-	
+	public boolean isNovo() {
+		return this.id == null;
+	}
 
 }
