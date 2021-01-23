@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import dev.jeffersonfreitas.myfinance.model.Banco;
 import dev.jeffersonfreitas.myfinance.repository.BancoRepository;
+import dev.jeffersonfreitas.myfinance.service.exceptions.ObjectNullException;
 
 @Service
 public class BancoService {
@@ -26,6 +27,9 @@ public class BancoService {
 	}
 
 	public void delete(Banco banco) {
+		if(banco == null || banco.getId() == null) {
+			throw new ObjectNullException("Objeto nulo!");
+		}
 		repository.delete(banco);		
 	}
 
@@ -34,9 +38,11 @@ public class BancoService {
 	}
 
 	
-	public Banco update(Banco bb) {
-		// TODO Auto-generated method stub
-		return null;
+	public Banco update(Banco banco) {
+		if(banco == null || banco.getId() == null) {
+			throw new ObjectNullException("Objeto nulo!");
+		}
+		return repository.save(banco);
 	}
 
 }
