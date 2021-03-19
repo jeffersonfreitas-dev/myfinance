@@ -49,4 +49,11 @@ public class BankServiceImpl implements BankService{
 		
 	}
 
+
+	@Override
+	public void delete(Long id) {
+		Bank bank = findById(id);
+		repository.delete(bank);
+	}
+
 }

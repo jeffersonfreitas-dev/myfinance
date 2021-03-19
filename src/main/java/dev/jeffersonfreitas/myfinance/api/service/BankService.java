@@ -12,4 +12,6 @@ public interface BankService {
 
 	Bank save(Bank bank);
 
+	void delete(Long id);
+
 }
