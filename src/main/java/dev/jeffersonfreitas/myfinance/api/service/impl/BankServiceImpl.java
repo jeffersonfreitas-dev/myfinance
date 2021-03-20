@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import dev.jeffersonfreitas.myfinance.api.service.BankService;
 import dev.jeffersonfreitas.myfinance.api.service.exceptions.BusinessException;
+import dev.jeffersonfreitas.myfinance.model.dto.BankDTO;
 import dev.jeffersonfreitas.myfinance.model.entity.Bank;
 import dev.jeffersonfreitas.myfinance.model.repository.BankRespository;
 
@@ -54,6 +55,15 @@ public class BankServiceImpl implements BankService{
 	public void delete(Long id) {
 		Bank bank = findById(id);
 		repository.delete(bank);
+	}
+
+
+	@Override
+	public Bank update(Long id, BankDTO dto) {
+		Bank bank = findById(id);
+		bank.setCode(dto.getCode());
+		bank.setName(dto.getName());
+		return repository.save(bank);
 	}
 
 }
