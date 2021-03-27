@@ -1,10 +1,14 @@
 package dev.jeffersonfreitas.myfinance.api.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +68,21 @@ public class BankController {
 		Bank bank = service.update(id, dto);
 		return modelMapper.map(bank, BankDTO.class);
 	}
+	
+	
+
+	@GetMapping
+	public Page<BankDTO> filter(@RequestBody BankDTO dto, Pageable pageable){
+		Bank filter = modelMapper.map(dto, Bank.class);
+		Page<Bank> result = service.filter(filter, pageable);
+		List<BankDTO> list = result.getContent().stream()
+				.map(e -> modelMapper.map(e, BankDTO.class)).collect(Collectors.toList());
+		return new PageImpl<>(list, pageable, result.getTotalElements());
+	}
+	
+	
+	
+	//TODO: Pesquisa de banco com agencias /api/bank/{id}/agences
 	
 	
 
