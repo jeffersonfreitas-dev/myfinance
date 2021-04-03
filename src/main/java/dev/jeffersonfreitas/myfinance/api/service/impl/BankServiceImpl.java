@@ -71,7 +71,18 @@ public class BankServiceImpl implements BankService{
 	}
 	
 	
+	@Override
+	public Page<Bank> findAllByNameOrCodeContaining(String name, String code, Pageable pageable) {
+		return repository.findAllByNameOrCodeContainingIgnoreCase(name, code, pageable);
+	}	
 
+
+	@Override
+	public Bank findOne(Long id) {
+		return repository.getOne(id);
+	}
+
+	
 	@SuppressWarnings("unlikely-arg-type")
 	private void verifyIfRecordAlreadyExists(Bank bank) {
 		Optional<Bank> optional = repository.findByCodeOrNameIgnoreCase(bank.getCode(), bank.getName());
@@ -79,13 +90,7 @@ public class BankServiceImpl implements BankService{
 		if(optional.isPresent() && !optional.equals(bank)) {
 			throw new BusinessException("Nome e/ou código do banco já cadastrado");
 		}
-		
 	}
 
-
-	@Override
-	public Page<Bank> findAllByNameOrCodeContaining(String name, String code, Pageable pageable) {
-		return repository.findAllByNameOrCodeContainingIgnoreCase(name, code, pageable);
-	}	
-
 }
+

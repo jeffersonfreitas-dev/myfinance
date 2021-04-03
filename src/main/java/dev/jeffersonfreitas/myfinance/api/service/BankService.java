@@ -24,4 +24,6 @@ public interface BankService {
 	
 	Page<Bank> findAllByNameOrCodeContaining(String name, String code, Pageable pageable);
 
+	Bank findOne(Long id);
+
 }

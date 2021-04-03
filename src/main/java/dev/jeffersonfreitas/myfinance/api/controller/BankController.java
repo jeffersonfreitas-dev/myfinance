@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.jeffersonfreitas.myfinance.api.service.BankService;
 import dev.jeffersonfreitas.myfinance.model.dto.BankDTO;
 import dev.jeffersonfreitas.myfinance.model.entity.Bank;
+import dev.jeffersonfreitas.myfinance.model.entity.BankAgence;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -43,7 +44,7 @@ public class BankController {
 	
 	
 	@GetMapping("{id}")
-	public Bank getBook(@PathVariable Long id) {
+	public Bank getBank(@PathVariable Long id) {
 		Bank bank = service.findById(id);
 		return bank;
 	}
@@ -81,8 +82,13 @@ public class BankController {
 	}
 	
 	
+	@GetMapping("{id}/bankAgences")
+	public List<BankAgence> getAgencesByBank(@PathVariable Long id){
+		//TODO: Pesquisa de banco com agencias
+		return null;
+	}
 	
-	//TODO: Pesquisa de banco com agencias /api/bank/{id}/agences
+	
 	
 	
 
