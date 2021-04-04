@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,6 +29,11 @@ public class ApiErrors {
 		this.errors = Arrays.asList(ex.getMessage());
 	}
 	
+
+	public ApiErrors(DataIntegrityViolationException ex) {
+		this.errors = Arrays.asList("Erro de integridade chave estrangeira", ex.getRootCause().getMessage());
+	}
+
 
 	public List<String> getErrors() {
 		return errors;

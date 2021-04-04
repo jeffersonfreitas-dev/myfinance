@@ -3,6 +3,10 @@ package dev.jeffersonfreitas.myfinance.api.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -45,16 +49,31 @@ public class BankAgenceServiceImpl implements BankAgenceService{
 		BankAgence agence = findById(id);
 		repository.delete(agence);
 	}
-	
 
-	@SuppressWarnings("unlikely-arg-type")
+	
+	@Override
+	public Page<BankAgence> filter(BankAgence filter, Pageable pageable) {
+		Example<BankAgence> result = Example.of(filter, 
+				ExampleMatcher
+					.matching()
+					.withIgnoreCase()
+					.withIgnoreNullValues()
+					.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+				);
+		return repository.findAll(result, pageable);
+	}
+
+	
 	private void vefifyIfRecordAlreadyExists(BankAgence agence) {
 		Optional<BankAgence> opt = repository.findByAgenceIgnoreCaseAndBankId(agence.getAgence(), agence.getBank().getId());
-		if(opt.isPresent() && !opt.equals(agence)) {
+		if(opt.isPresent() && !opt.get().equals(agence)) {
 			throw new BusinessException("Agencia já cadastrado para este banco");
 		}
 		
 	}
+
+
+
 
 
 }

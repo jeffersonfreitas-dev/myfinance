@@ -1,5 +1,6 @@
 package dev.jeffersonfreitas.myfinance.api.exceptions;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -35,5 +36,12 @@ public class ApplicationAdviceException{
 		BindingResult bindingResult = ex.getBindingResult();
 		return new ApiErrors(bindingResult);
 	}
-
+	
+	
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ApiErrors handleDataIntegrityViolationException (DataIntegrityViolationException ex) {
+		return new ApiErrors(ex);
+		
+	}
 }

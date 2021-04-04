@@ -5,11 +5,15 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -58,6 +62,31 @@ public class BankAgenceController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
 		service.delete(id);
+	}
+	
+	
+	@PutMapping("{id}")
+	public BankAgence update(@PathVariable Long id, @Valid @RequestBody BankAgenceDTO dto) {
+		BankAgence agence = service.findById(id);
+		Bank bank = bankService.findById(dto.getBank());
+		agence.setAgence(dto.getAgence());
+		agence.setBank(bank);
+		return service.save(agence);
+	}
+	
+	
+	@GetMapping
+	public Page<BankAgence> filter (@RequestBody BankAgenceDTO dto, Pageable pageable){
+		BankAgence filter = new BankAgence();
+		
+		if(dto.getBank() != null) {
+			Bank bank = bankService.findById(dto.getBank());
+			filter.setBank(bank);
+		}
+		
+		modelMapper.map(dto, filter);
+		Page<BankAgence> result = service.filter(filter, pageable);
+		return new PageImpl<>(result.getContent(), pageable, result.getTotalElements());
 	}
 	
 

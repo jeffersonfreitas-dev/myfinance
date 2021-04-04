@@ -16,13 +16,13 @@ import dev.jeffersonfreitas.myfinance.api.service.BankService;
 import dev.jeffersonfreitas.myfinance.api.service.exceptions.BusinessException;
 import dev.jeffersonfreitas.myfinance.model.dto.BankDTO;
 import dev.jeffersonfreitas.myfinance.model.entity.Bank;
-import dev.jeffersonfreitas.myfinance.model.repository.BankRespository;
+import dev.jeffersonfreitas.myfinance.model.repository.BankRepository;
 
 @Service
 public class BankServiceImpl implements BankService{
 
 	@Autowired
-	private BankRespository repository;
+	private BankRepository repository;
 	
 	@Override
 	public Bank findById(Long id) {
@@ -78,16 +78,15 @@ public class BankServiceImpl implements BankService{
 
 
 	@Override
-	public Bank findOne(Long id) {
-		return repository.getOne(id);
+	public Optional<Bank> findOne(Long id) {
+		return Optional.ofNullable(repository.getOne(id));
 	}
 
 	
-	@SuppressWarnings("unlikely-arg-type")
 	private void verifyIfRecordAlreadyExists(Bank bank) {
 		Optional<Bank> optional = repository.findByCodeOrNameIgnoreCase(bank.getCode(), bank.getName());
 		
-		if(optional.isPresent() && !optional.equals(bank)) {
+		if(optional.isPresent() && !optional.get().equals(bank)) {
 			throw new BusinessException("Nome e/ou código do banco já cadastrado");
 		}
 	}

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import dev.jeffersonfreitas.myfinance.model.entity.Bank;
 
-public interface BankRespository extends JpaRepository<Bank, Long>{
+public interface BankRepository extends JpaRepository<Bank, Long>{
 
 	List<Bank> findAllByOrderByNameAsc();
 
