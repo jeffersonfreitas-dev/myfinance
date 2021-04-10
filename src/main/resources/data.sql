@@ -8,3 +8,6 @@ INSERT INTO bank_agence(agence, id_bank) VALUES('0613', 2);
 
 INSERT INTO company(name, document) VALUES ('UNIMED', '0000000000000');
 INSERT INTO company(name, document) VALUES ('UNILAB', '1111111111111');
+
+INSERT INTO company_account(code, account, id_company, id_bank_agence) VALUES ('13199', '129-5', 1, 1);
+INSERT INTO company_account(code, account, id_company, id_bank_agence) VALUES ('13195', '4211-0', 2, 1);
