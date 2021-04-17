@@ -72,7 +72,6 @@ public class CompanyAccountController {
 	
 	
 	
-	
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public Page<CompanyAccount> filter(@RequestBody CompanyAccountDTO dto, Pageable pageable){
