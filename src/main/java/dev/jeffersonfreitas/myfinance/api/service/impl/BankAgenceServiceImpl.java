@@ -13,6 +13,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import dev.jeffersonfreitas.myfinance.api.service.BankAgenceService;
 import dev.jeffersonfreitas.myfinance.api.service.exceptions.BusinessException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeDeletedException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeNullException;
 import dev.jeffersonfreitas.myfinance.model.entity.BankAgence;
 import dev.jeffersonfreitas.myfinance.model.repository.BankAgenceRepository;
 import lombok.AllArgsConstructor;
@@ -25,6 +27,9 @@ public class BankAgenceServiceImpl implements BankAgenceService{
 
 	@Override
 	public BankAgence save(BankAgence agence) {
+		if(agence == null) {
+			throw new RecordNotCanBeNullException("Não pode salvar um registro nulo.");
+		}
 		vefifyIfRecordAlreadyExists(agence);
 		return repository.save(agence);
 	}
@@ -47,7 +52,11 @@ public class BankAgenceServiceImpl implements BankAgenceService{
 	@Override
 	public void delete(Long id) {
 		BankAgence agence = findById(id);
-		repository.delete(agence);
+		try {
+			repository.delete(agence);
+		}catch(Exception e) {
+			throw new RecordNotCanBeDeletedException("Ocorreu um erro e o registro não pode ser deletado.");
+		}
 	}
 
 	

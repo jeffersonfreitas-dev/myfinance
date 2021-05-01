@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
 import dev.jeffersonfreitas.myfinance.api.service.exceptions.BusinessException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeDeletedException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeNullException;
 
 @RestControllerAdvice
 public class ApplicationAdviceException{
@@ -30,6 +32,20 @@ public class ApplicationAdviceException{
 	}
 	
 
+	@ExceptionHandler(RecordNotCanBeDeletedException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ApiErrors handleRecordNotCanBeDeletedException(RecordNotCanBeDeletedException ex) {
+		return new ApiErrors(ex);
+	}
+	
+	
+	@ExceptionHandler(RecordNotCanBeNullException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ApiErrors handleRecordNotCanBeNullException(RecordNotCanBeNullException ex) {
+		return new ApiErrors(ex);
+	}
+	
+	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ApiErrors handleBindingResult (MethodArgumentNotValidException ex) {
@@ -42,6 +58,5 @@ public class ApplicationAdviceException{
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ApiErrors handleDataIntegrityViolationException (DataIntegrityViolationException ex) {
 		return new ApiErrors(ex);
-		
 	}
 }

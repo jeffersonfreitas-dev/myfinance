@@ -9,6 +9,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.server.ResponseStatusException;
 
 import dev.jeffersonfreitas.myfinance.api.service.exceptions.BusinessException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeDeletedException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeNullException;
 
 public class ApiErrors {
 
@@ -32,6 +34,16 @@ public class ApiErrors {
 
 	public ApiErrors(DataIntegrityViolationException ex) {
 		this.errors = Arrays.asList("Erro de integridade chave estrangeira", ex.getRootCause().getMessage());
+	}
+
+
+	public ApiErrors(RecordNotCanBeDeletedException ex) {
+		this.errors = Arrays.asList(ex.getMessage());
+	}
+
+
+	public ApiErrors(RecordNotCanBeNullException ex) {
+		this.errors = Arrays.asList(ex.getMessage());
 	}
 
 

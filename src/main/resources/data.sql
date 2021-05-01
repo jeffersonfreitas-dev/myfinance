@@ -18,3 +18,9 @@ INSERT INTO account_subplan(name, id_accountplan) VALUES ('AGUA/LUZ/TELEFONE MES
 
 INSERT INTO person(name, phone, document) VALUES ('UNIMED', '35827700', '11685526000179');
 INSERT INTO person(name, phone, document) VALUES ('UNILAB', '35827700', '11685526000250');
+INSERT INTO person(name, phone, document) VALUES ('ENEL', '35827700', '1245475454878');
+
+INSERT INTO billpay(invoice, historic, emission_date, due_date, value, portion, installment, id_provider, id_account_subplan, id_company) 
+	values ('0001', 'CONTA DE ENERGIA', '2021-05-01', '2021-05-15', 200.0, 5, 12, 3, 2, 1);
+INSERT INTO billpay(invoice, historic, emission_date, due_date, value, portion, installment, id_provider, id_account_subplan, id_company) 
+	values ('0002', 'CONTA DE TELEFONE', '2021-05-01', '2021-05-30', 1568.2, 1, 1, 3, 2, 1);

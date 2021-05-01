@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import dev.jeffersonfreitas.myfinance.api.service.AccountPlanService;
 import dev.jeffersonfreitas.myfinance.api.service.exceptions.BusinessException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeDeletedException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeNullException;
 import dev.jeffersonfreitas.myfinance.model.entity.AccountPlan;
 import dev.jeffersonfreitas.myfinance.model.repository.AccountPlanRepository;
 import lombok.AllArgsConstructor;
@@ -25,6 +27,9 @@ public class AccountPlanServiceImpl implements AccountPlanService{
 
 	@Override
 	public AccountPlan save(AccountPlan accountPlan) {
+		if(accountPlan == null) {
+			throw new RecordNotCanBeNullException("Não pode salvar um registro nulo.");
+		}
 		verifyIfRecordAlreadySaved(accountPlan);
 		return repository.save(accountPlan);
 	}
@@ -41,7 +46,11 @@ public class AccountPlanServiceImpl implements AccountPlanService{
 	@Override
 	public void delete(Long id) {
 		AccountPlan plan = findById(id);
-		repository.delete(plan);
+		try {
+			repository.delete(plan);
+		}catch(Exception e) {
+			throw new RecordNotCanBeDeletedException("Ocorreu um erro e o registro não pode ser deletado.");
+		}
 	}
 
 	

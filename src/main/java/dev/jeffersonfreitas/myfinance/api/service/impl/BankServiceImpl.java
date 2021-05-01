@@ -14,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import dev.jeffersonfreitas.myfinance.api.service.BankService;
 import dev.jeffersonfreitas.myfinance.api.service.exceptions.BusinessException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeDeletedException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeNullException;
 import dev.jeffersonfreitas.myfinance.model.dto.BankDTO;
 import dev.jeffersonfreitas.myfinance.model.entity.Bank;
 import dev.jeffersonfreitas.myfinance.model.repository.BankRepository;
@@ -39,6 +41,9 @@ public class BankServiceImpl implements BankService{
 
 	@Override
 	public Bank save(Bank bank) {
+		if(bank == null) {
+			throw new RecordNotCanBeNullException("Não pode salvar um registro nulo.");
+		}
 		verifyIfRecordAlreadyExists(bank);
 		return repository.save(bank);
 	}
@@ -47,7 +52,11 @@ public class BankServiceImpl implements BankService{
 	@Override
 	public void delete(Long id) {
 		Bank bank = findById(id);
-		repository.delete(bank);
+		try {
+			repository.delete(bank);
+		}catch(Exception e) {
+			throw new RecordNotCanBeDeletedException("Ocorreu um erro e o registro não pode ser deletado.");
+		}
 	}
 
 

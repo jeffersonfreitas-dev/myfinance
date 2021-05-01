@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import dev.jeffersonfreitas.myfinance.api.service.PersonService;
 import dev.jeffersonfreitas.myfinance.api.service.exceptions.BusinessException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeDeletedException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeNullException;
 import dev.jeffersonfreitas.myfinance.model.entity.Person;
 import dev.jeffersonfreitas.myfinance.model.repository.PersonRepository;
 import lombok.AllArgsConstructor;
@@ -25,6 +27,9 @@ public class PersonServiceImpl implements PersonService{
 	
 	@Override
 	public Person save(Person person) {
+		if(person == null) {
+			throw new RecordNotCanBeNullException("Não pode salvar um registro nulo.");
+		}
 		vefifyIfRecordAlreadyExists(person);
 		return repository.save(person);
 	}
@@ -41,7 +46,11 @@ public class PersonServiceImpl implements PersonService{
 	@Override
 	public void delete(Long id) {
 		Person person = findById(id);
-		repository.delete(person);
+		try {
+			repository.delete(person);
+		}catch(Exception e) {
+			throw new RecordNotCanBeDeletedException("Ocorreu um erro e o registro não pode ser deletado.");
+		}
 	}
 
 	

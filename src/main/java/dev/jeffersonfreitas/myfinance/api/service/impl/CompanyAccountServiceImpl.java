@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import dev.jeffersonfreitas.myfinance.api.service.CompanyAccountService;
 import dev.jeffersonfreitas.myfinance.api.service.exceptions.BusinessException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeDeletedException;
+import dev.jeffersonfreitas.myfinance.api.service.exceptions.RecordNotCanBeNullException;
 import dev.jeffersonfreitas.myfinance.model.entity.CompanyAccount;
 import dev.jeffersonfreitas.myfinance.model.repository.CompanyAccountRepository;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,9 @@ public class CompanyAccountServiceImpl implements CompanyAccountService{
 
 	@Override
 	public CompanyAccount save(CompanyAccount companyAccount) {
+		if(companyAccount == null) {
+			throw new RecordNotCanBeNullException("Não pode salvar um registro nulo.");
+		}
 		verifyIfRecordAlreadyRecorded(companyAccount);
 		return repository.save(companyAccount);
 	}
@@ -42,7 +47,11 @@ public class CompanyAccountServiceImpl implements CompanyAccountService{
 	@Override
 	public void delete(Long id) {
 		CompanyAccount companyAccount = findById(id);
-		repository.delete(companyAccount);		
+		try {
+			repository.delete(companyAccount);
+		}catch(Exception e) {
+			throw new RecordNotCanBeDeletedException("Ocorreu um erro e o registro não pode ser deletado.");
+		}		
 	}	
 	
 	
